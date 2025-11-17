@@ -8,43 +8,56 @@ function Login() {
     formState: { errors },
   } = useForm();
 
+  const users = [{ email: 'sd@ex.com', password: '123' }];
+
+  const SuccessLogin = () => (
+    <div>
+      <h2>Login Successful</h2>
+      <p>Welcome back!</p>
+    </div>
+  );
+
+  const FailedLogin = () => (
+    <div>
+      <h2>Login Failed</h2>
+      <p>Please try again!</p>
+    </div>
+  );
+
   const onSubmit = (data) => {
-    const userData = JSON.parse(localStorage.getItem(data.email));
-    if (userData) {
-      if (userData.password === data.password) {
-        console.log(userData.name + ' You Are Successfully Logged In');
-      } else {
-        console.log('Email or Password is not matching with our record');
-      }
+    const user = users.find(
+      (u) => u.email === data.email && u.password === data.password
+    );
+
+    if (user) {
+      alert('Login Successful');
+      return <SuccessLogin />;
     } else {
-      console.log('Email or Password is not matching with our record');
+      alert('Login Failed');
+      return <FailedLogin />;
     }
   };
 
   return (
     <div className='container'>
-      <h2>Login Form</h2>
+      <h2>Login</h2>
 
-      <form className='App' onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type='email'
           {...register('email', { required: true })}
           placeholder='Email'
         />
-        {errors.email && (
-          <span style={{ color: 'red' }}>*Email* is mandatory</span>
-        )}
+        {errors.email && <span>*Email* is mandatory</span>}
 
         <input
           type='password'
           {...register('password', { required: true })}
           placeholder='Password'
         />
-        {errors.password && (
-          <span style={{ color: 'red' }}>*Password* is mandatory</span>
-        )}
+        {errors.password && <span>*Password* is mandatory</span>}
 
-        <input type='submit' style={{ backgroundColor: '#a1eafb' }} />
+        <input type='submit' value='Log In' />
       </form>
     </div>
   );
